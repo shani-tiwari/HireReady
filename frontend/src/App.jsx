@@ -1,9 +1,14 @@
-import React from 'react'
+import {RouterProvider} from "react-router";
+import {router} from "./app.routes.jsx"; // ** .jsx extension
+
+
 
 function App() {
   return (
-    <div>App</div>
+    <RouterProvider router={router} />
   )
 }
+
+
 
 export default App
