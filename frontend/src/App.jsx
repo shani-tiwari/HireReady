@@ -1,12 +1,18 @@
 import {RouterProvider} from "react-router";
-import {router} from "./app.routes.jsx"; // ** .jsx extension
+import {router} from "./app.routes.jsx";    // ** .jsx extension
+import { AuthProvider } from "./features/auth/auth.context.jsx";
 
 
 
 function App() {
+
   return (
-    <RouterProvider router={router} />
-  )
+    // every route page will have the access of state from context
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
+
 }
 
 
