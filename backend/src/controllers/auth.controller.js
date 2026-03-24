@@ -26,7 +26,7 @@ async function registerUser(req, res){
         const hashPassword = await bcrypt.hash(password, 10);
         const newUser = await userModel.create({name, email, password: hashPassword});
 
-        const token = jwt.sign({id: newUser._id, username: newUser.username}, process.env.JWT_SECRET, {expiresIn: "1d"});   
+        const token = jwt.sign({id: newUser._id, name: newUser.name}, process.env.JWT_SECRET, {expiresIn: "1d"});   
 
         res.cookie("token", token);
 
@@ -61,7 +61,7 @@ async function loginUser(req, res){
             return res.status(400).json({message: "All fields are required"});
         }
 
-        const user = await userModel.findOne({email});
+        const user = await userModel.findOne({email}).select("+password");
         if(!user) return res.status(400).json({message: "User not found"});
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
