@@ -21,7 +21,8 @@ export default function Protected({children}) {
         return navigate('/login');
     }
 
-    return(
-        {children}
-    );
+    // return(
+    //     {children}
+    // );
+    return children;
 }

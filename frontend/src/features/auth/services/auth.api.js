@@ -43,7 +43,7 @@ export const loginUser = async ({email, password}) => {
  */
 export const logoutUser = async () => {
     try {
-        const response = await axios.get(`/logout`);
+        const response = await api.get(`/logout`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -56,7 +56,7 @@ export const logoutUser = async () => {
  */
 export const getUser = async () => {
     try {
-        const response = await axios.get(`/get-me`);
+        const response = await api.get(`/get-me`);
         return response.data;
     } catch (error) {
         console.log(error);
