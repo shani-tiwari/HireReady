@@ -67,7 +67,7 @@ const skillGapSchema = new mongoose.Schema({
 
 
 /**
- * @name preparationPlanSchema - schema for preparation plan
+ * @name preparationPlanSchema - schema for preparation plan 
  * @description Preparation plan schema
  * @access 
  */
@@ -102,10 +102,10 @@ const interviewReportSchema = new mongoose.Schema({
         min: 0,
         max: 100,
     },
-    technicalQuestions:  [ technicalQuestionSchema  ],
-    behavioralQuestions: [ behavioralQuestionSchema ],
     skillGaps:           [ skillGapSchema           ],
+    technicalQuestions:  [ technicalQuestionSchema  ],
     preparationPlan:     [ preparationPlanSchema    ],
+    behavioralQuestions: [ behavioralQuestionSchema ],
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users"
