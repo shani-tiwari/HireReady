@@ -2,7 +2,14 @@ const pdfParse = require("pdf-parse");
 const {generateInterviewReport} = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
-
+/**
+ * @description controller to generate new interview report basis of job description and resume
+ * @method POST
+ * @url /api/interview/
+ * @body {jobDescription: string, resume: string}
+ * @returns {pdfBuffer: Buffer}
+ * @access private
+ */
 const InterviewReportController = async (req, res) => {
 
     try {
@@ -38,6 +45,59 @@ const InterviewReportController = async (req, res) => {
 
     };
 
+};
+
+
+/**
+ * @description controller to get interview report by interviewId
+ * @method GET
+ * @url /api/interview/report/:interviewId
+ * @access private
+ */
+const getInterviewReportById = async (req, res) => {
+    try {
+        const { interviewId } = req.params;
+        const interviewReport = await interviewReportModel.findById(interviewId);
+        return res.status(200).json({ interviewReport });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error..." });
+    };
+};
+
+
+/**
+ * @description controller to get all interview reports of logged in user
+ * @method GET
+ * @url /api/interview/
+ * @access private
+ */
+const getAllInterviewReports = async (req, res) => {
+    try {
+        const interviewReports = await interviewReportModel.find({ user: req.user.id });
+        return res.status(200).json({ interviewReports });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error..." });
+    };
+};
+
+
+/**
+ * @description controller to generate resume pdf based on user self description, resume content and job description.
+ * @method POST
+ * @url /api/interview/resume/pdf/:interviewReportId
+ * @access private
+ */
+const generateResumePdf = async (req, res) => {
+    try {
+        const { interviewReportId } = req.params;
+        const interviewReport = await interviewReportModel.findById(interviewReportId);
+        return res.status(200).json({ interviewReport });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error..." });
+    };
 };
 
 
