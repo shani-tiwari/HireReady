@@ -1,7 +1,7 @@
 const express = require("express");
 const interviewRouter = express.Router();
 const authUser = require("../middleware/auth.middleware");
-const {InterviewReportController} = require("../controllers/interview.controller");
+const {InterviewReportController, getInterviewReportById, getAllInterviewReports, generateResumePdf} = require("../controllers/interview.controller");
 const upload = require("../middleware/file.middleware");
 
 /**

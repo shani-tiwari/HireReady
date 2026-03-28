@@ -74,7 +74,10 @@ const getInterviewReportById = async (req, res) => {
  */
 const getAllInterviewReports = async (req, res) => {
     try {
-        const interviewReports = await interviewReportModel.find({ user: req.user.id });
+        const interviewReports = await interviewReportModel.find({ user: req.user.id })
+        .sort({ createdAt: -1 })
+        .select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan"); 
+
         return res.status(200).json({ interviewReports });
     } catch (error) {
         console.log(error);
@@ -102,5 +105,8 @@ const generateResumePdf = async (req, res) => {
 
 
 module.exports = { 
-    InterviewReportController 
+    InterviewReportController,
+    getInterviewReportById,
+    getAllInterviewReports,
+    generateResumePdf
 };

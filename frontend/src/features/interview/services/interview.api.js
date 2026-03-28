@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:3000/api",
     withCredentials: true,
 });
 
@@ -11,49 +11,51 @@ const api = axios.create({
  */
 export const generateInterviewReport = async ({ jobDescription, selfDescription, resumeFile }) => {
 
-    const formData = new FormData()
+    // create form data to send file to backend
+    const formData = new FormData();
+
     formData.append("jobDescription", jobDescription)
     formData.append("selfDescription", selfDescription)
     formData.append("resume", resumeFile)
 
-    const response = await api.post("/api/interview/", formData, {
+    const response = await api.post("/interview/", formData, {
         headers: {
             "Content-Type": "multipart/form-data"
         }
-    })
+    });
 
-    return response.data
+    return response.data;
 
-}
+};
 
 
 /**
  * @description get interview report by interviewId.
  */
 export const getInterviewReportById = async (interviewId) => {
-    const response = await api.get(`/api/interview/report/${interviewId}`)
+    const response = await api.get(`/interview/report/${interviewId}`)
 
-    return response.data
-}
+    return response.data;
+};
 
 
 /**
  * @description Service to get all interview reports of logged in user.
  */
 export const getAllInterviewReports = async () => {
-    const response = await api.get("/api/interview/")
+    const response = await api.get("/interview/")
 
-    return response.data
-}
+    return response.data;
+};
 
 
 /**
  * @description Service to generate resume pdf based on user self description, resume content and job description.
  */
 export const generateResumePdf = async ({ interviewReportId }) => {
-    const response = await api.post(`/api/interview/resume/pdf/${interviewReportId}`, null, {
+    const response = await api.post(`/interview/resume/pdf/${interviewReportId}`, null, {
         responseType: "blob"
     })
 
-    return response.data
-}
+    return response.data;
+};
