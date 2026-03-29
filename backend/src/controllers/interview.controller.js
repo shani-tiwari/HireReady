@@ -13,13 +13,21 @@ const interviewReportModel = require("../models/interviewReport.model");
 const InterviewReportController = async (req, res) => {
 
     try {
+        const { selfDescription, jobDescription } = req.body;
+
+        if (!selfDescription || !jobDescription || !req.file) {
+            return res.status(400).json({ message: "All fields are required (Description and Resume)..." });
+        };
 
         const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
-        const {selfDescription, jobDescription} = req.body;
 
-        if(!selfDescription || !jobDescription || !req.file) {
-            return res.status(400).json({message: "All fields are required..."});
-        };  
+        const prompt = `Generate an interview report for a candidate with the following details:
+                    Resume: ${resumeContent.text}
+                    Self Description: ${selfDescription}
+                    Job Description: ${jobDescription}
+                    
+                    IMPORTANT: The response MUST be a JSON object with the exact fields specified in the schema. 
+                    The "title" field MUST be a string representing the job title.`;
 
         const interviewReportAI = await generateInterviewReport({
             resume: resumeContent.text,
@@ -30,8 +38,9 @@ const InterviewReportController = async (req, res) => {
         const interviewReport = await interviewReportModel.create({
             jobDescription,
             selfDescription,
-            user: req.user.id,
-            resume: resumeContent.text,
+            user: req.user._id,
+            resume: resumeContent?.text || "No resume text extracted",
+            title: interviewReportAI?.title || "Interview Strategy",
             ...interviewReportAI
         }); 
 
@@ -74,7 +83,7 @@ const getInterviewReportById = async (req, res) => {
  */
 const getAllInterviewReports = async (req, res) => {
     try {
-        const interviewReports = await interviewReportModel.find({ user: req.user.id })
+        const interviewReports = await interviewReportModel.find({ user: req.user._id })
         .sort({ createdAt: -1 })
         .select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan"); 
 

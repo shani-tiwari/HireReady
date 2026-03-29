@@ -60,10 +60,13 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
     const prompt = `Generate an interview report for a candidate with the following details:
                     Resume: ${resume}
                     Self Description: ${selfDescription}
-                    Job Description: ${jobDescription} ` ;
+                    Job Description: ${jobDescription}
+                    
+                    The response should be a JSON object conforming to the provided schema. 
+                    Ensure the "title" field accurately reflects the job title.`; 
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-2.0-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -131,7 +134,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
                     `;
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.0-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
