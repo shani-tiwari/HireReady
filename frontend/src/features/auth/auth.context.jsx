@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {createContext, useState} from "react";
 import { getUser } from "./services/auth.api";
 
@@ -31,9 +31,14 @@ export const AuthProvider = ( {children} ) => {
     }, [setUser, setLoading]);
 
     return (
-        <AuthContext.Provider  value={{user,setUser,loading,setLoading}}>
+        //  value object is recreated on every render, and that can cause all context consumers to re-render even when 
+        // the actual values have not changed - useMemo
+         <AuthContext.Provider
+             value={
+                useMemo( () => ({ user, setUser, loading, setLoading }), [user, loading] )
+            }
+        >
             {children}
-        </AuthContext.Provider>
-    );
-
+         </AuthContext.Provider>
+    )
 }

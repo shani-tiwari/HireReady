@@ -50,7 +50,7 @@ export const useAuth = () => {
         }
     }
 
-    // // get and set user handler
+    //  get and set user handler
     // useEffect(() => {
 
     //     const getAndSetUser = async () => {
