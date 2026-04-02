@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../auth.context";
-import { loginUser, registerUser, logoutUser, getUser  } from "../services/auth.api";
+import { loginUser, registerUser, logoutUser  } from "../services/auth.api";
 
 
 
@@ -39,35 +39,35 @@ export const useAuth = () => {
 
     // logout handler
     const handleLogout = async () => {
-        setLoading(true)
+        setLoading(true);
         try {
-            await logoutUser()
-            setUser(null)
+            setUser(null);
+            await logoutUser();
         } catch (err) {
             console.log(err);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
 
-    // get and set user handler
-    useEffect(() => {
+    // // get and set user handler
+    // useEffect(() => {
 
-        const getAndSetUser = async () => {
-            try {
-                const data = await getUser()
-                setUser(data.user)
-            } catch (err) { 
-                console.log(err);
-                setUser(null)
-            } finally {
-                setLoading(false)
-            }
-        }
+    //     const getAndSetUser = async () => {
+    //         try {
+    //             const data = await getUser()
+    //             setUser(data.user)
+    //         } catch (err) { 
+    //             console.log(err);
+    //             setUser(null)
+    //         } finally {
+    //             setLoading(false)
+    //         }
+    //     }
 
-        getAndSetUser()
+    //     getAndSetUser()
 
-    }, [setUser, setLoading]);
+    // }, [setUser, setLoading]);
 
     return { user, loading, handleRegister, handleLogin, handleLogout };
 

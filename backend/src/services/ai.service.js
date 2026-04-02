@@ -1,6 +1,7 @@
 const { GoogleGenAI } = require( "@google/genai");
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
+const puppeteer = require("puppeteer");
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
@@ -86,7 +87,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
  * @returns {Promise<Buffer>} - The PDF buffer
  */
 async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 

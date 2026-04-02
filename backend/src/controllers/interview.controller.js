@@ -15,11 +15,15 @@ const InterviewReportController = async (req, res) => {
     try {
         const { selfDescription, jobDescription } = req.body;
 
-        if (!selfDescription || !jobDescription || !req.file) {
+        if ( !jobDescription || (!selfDescription && !req.file) ) {
             return res.status(400).json({ message: "All fields are required (Description and Resume)..." });
         };
 
-        const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
+        let resumeContent;
+        if (req.file){
+            resumeContent = await pdfParse(req.file.buffer);
+            //    await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
+        };
 
         const prompt = `Generate an interview report for a candidate with the following details:
                     Resume: ${resumeContent.text}
@@ -30,7 +34,7 @@ const InterviewReportController = async (req, res) => {
                     The "title" field MUST be a string representing the job title.`;
 
         const interviewReportAI = await generateInterviewReport({
-            resume: resumeContent.text,
+            resume: resumeContent?.text || "No resume text extracted",
             selfDescription, 
             jobDescription
         });
