@@ -26,7 +26,7 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
             }
         }
     );
-    // console.log(response.data);
+    console.log("api response - ", response.data);
     return response.data;
 
 };

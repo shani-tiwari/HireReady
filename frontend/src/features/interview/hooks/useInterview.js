@@ -28,6 +28,7 @@ export const useInterview = () => {
             setLoading(false)
         }
 
+        console.log("report from hooks - ", response.interviewReport)
         return response.interviewReport
     };
 
