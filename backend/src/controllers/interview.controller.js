@@ -24,16 +24,16 @@ const InterviewReportController = async (req, res) => {
             resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
         };
 
-        const prompt = `Generate an interview report for a candidate with the following details:
-                    Resume: ${resumeContent}
-                    Self Description: ${selfDescription}
-                    Job Description: ${jobDescription}
+        // const prompt = `Generate an interview report for a candidate with the following details:
+        //             Resume: ${resumeContent}
+        //             Self Description: ${selfDescription}
+        //             Job Description: ${jobDescription}
                     
-                    IMPORTANT: The response MUST be a JSON object with the exact fields specified in the schema. 
-                    The "title" field MUST be a string representing the job title.`;
+        //             IMPORTANT: The response MUST be a JSON object with the exact fields specified in the schema. 
+        //             The "title" field MUST be a string representing the job title.`;
 
         const interviewReportAI = await generateInterviewReport({
-            resume: resumeContent || "No resume text extracted",
+            resume: resumeContent.text || "No resume text extracted",
             selfDescription, 
             jobDescription
         });
@@ -47,8 +47,8 @@ const InterviewReportController = async (req, res) => {
             ...interviewReportAI
         }); 
 
+        console.log("interview report from controller - " + interviewReport);
         return res.status(201).json({message: "Interview report generated successfully...", interviewReport});
-
 
     } catch (error) {
 

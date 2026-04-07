@@ -63,20 +63,24 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                     Self Description: ${selfDescription}
                     Job Description: ${jobDescription}
                     
-                    The response should be a JSON object conforming to the provided schema. 
+                    The response should be a JSON object conforming to the provided schema in config. 
                     Ensure the "title" field accurately reflects the job title.`; 
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview", 
+        model: "gemini-2.5-flash", 
         contents: prompt,
         config: {
             responseMimeType: "application/json",
             responseSchema: zodToJsonSchema(interviewReportSchema),
         }
     });
-
-    return JSON.parse(response.text)
-
+    try {
+        const parsed = JSON.parse(response.text);
+        return parsed;
+    } catch (error) {
+        console.error("Failed to parse Gemini JSON response:", response.text);
+        throw error;
+    }
 };
 
 
