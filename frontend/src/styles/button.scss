@@ -17,4 +17,25 @@
     &:active{
         transform: scale(0.9);
     }
-} 
+}
+
+@media (max-width: 1024px) {
+    .button {
+        padding-inline: 1.25rem;
+        padding-block: 0.68rem;
+        border-radius: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .button {
+        width: 100%;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding-inline: 1rem;
+        padding-block: 0.7rem;
+        border-radius: 0.75rem;
+    }
+}
