@@ -1,5 +1,5 @@
 const pdfParse = require("pdf-parse");
-const {generateInterviewReport} = require("../services/ai.service");
+const { generateInterviewReport, generateResumePdf: generateResumePdfService } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
 /**
@@ -41,7 +41,7 @@ const InterviewReportController = async (req, res) => {
         const interviewReport = await interviewReportModel.create({
             jobDescription,
             selfDescription,
-            user: req.user._id,
+            user: req.user.id,
             resume: resumeContent?.text || "No resume text extracted",
             title: interviewReportAI?.title || "Interview Strategy",
             ...interviewReportAI
@@ -86,7 +86,7 @@ const getInterviewReportById = async (req, res) => {
  */
 const getAllInterviewReports = async (req, res) => {
     try {
-        const interviewReports = await interviewReportModel.find({ user: req.user._id })
+        const interviewReports = await interviewReportModel.find({ user: req.user.id })
         .sort({ createdAt: -1 })
         .select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan"); 
 
@@ -111,7 +111,7 @@ const generateResumePdf = async (req, res) => {
         if(!interviewReport) {
             return res.status(404).json({message: "Interview report not found..."});
         };
-        const pdfBuffer = await generateResumePdf({
+        const pdfBuffer = await generateResumePdfService({
             resume: interviewReport.resume,
             selfDescription: interviewReport.selfDescription,
             jobDescription: interviewReport.jobDescription
